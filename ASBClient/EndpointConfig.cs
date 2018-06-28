@@ -3,8 +3,9 @@ namespace ASBClient
     using System;
     using System.Threading.Tasks;
     using NServiceBus;
-    using Payments.Commands;
-    using Payments.Events;
+
+    using Payments.Messages.Commands;
+    using Payments.Messages.Events;
 
     public class EndpointConfig : IConfigureThisEndpoint
     {

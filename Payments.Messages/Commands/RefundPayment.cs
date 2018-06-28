@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Payments.Commands
+﻿namespace Payments.Messages.Commands
 {
+    using System;
+
     public class RefundPayment
     {
         public Guid PaymentReference { get; }
@@ -11,8 +11,8 @@ namespace Payments.Commands
 
         public RefundPayment(Guid paymentReference, decimal amount)
         {
-            PaymentReference = paymentReference;
-            Amount = amount;
+            this.PaymentReference = paymentReference;
+            this.Amount = amount;
         }
     }
 }

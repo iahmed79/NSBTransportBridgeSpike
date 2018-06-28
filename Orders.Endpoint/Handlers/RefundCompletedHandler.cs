@@ -1,10 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using NServiceBus;
-
-namespace Orders.Endpoint.Handlers
+﻿namespace Orders.Endpoint.Handlers
 {
-    using Payments.Events;
+    using System;
+    using System.Threading.Tasks;
+
+    using NServiceBus;
+
+    using Payments.Messages.Events;
 
     public class RefundCompletedHandler : IHandleMessages<IRefundCompleted>
     {

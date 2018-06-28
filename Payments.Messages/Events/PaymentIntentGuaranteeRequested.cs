@@ -1,4 +1,4 @@
-﻿namespace Payments.Events
+﻿namespace Payments.Messages.Events
 {
     using System;
 

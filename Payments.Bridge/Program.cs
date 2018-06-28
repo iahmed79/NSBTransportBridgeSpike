@@ -31,12 +31,14 @@
                         transportExtensions.ConnectionString(asbConnectionString);
                         transportExtensions.Transactions(TransportTransactionMode.ReceiveOnly);
                         transportExtensions.UseForwardingTopology();
+                        transportExtensions.Sanitization().UseStrategy<SubscriptionRuleNameSanitizationStrategy>();
                         var settings = transportExtensions.GetSettings();
                         var serializer = Tuple.Create(new NewtonsoftSerializer() as SerializationDefinition, new SettingsHolder());
                         settings.Set("MainSerializer", serializer);
                     });
 
             bridgeConfiguration.AutoCreateQueues();
+            
             var storage = new SqlSubscriptionStorage(() => new SqlConnection(dbConnectionString), "Bridge", new SqlDialect.MsSqlServer(), null);
             await storage.Install();
             bridgeConfiguration.UseSubscriptionPersistence(storage);
@@ -44,7 +46,7 @@
             var bridge = bridgeConfiguration.Create();
             
             await bridge.Start();
-
+            
             Console.ReadLine();
         }
     }

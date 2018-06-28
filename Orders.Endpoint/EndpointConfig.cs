@@ -1,9 +1,10 @@
 using System;
-using Payments.Events;
 
 namespace Orders.Endpoint
 {
     using NServiceBus;
+
+    using Payments.Messages.Events;
 
     public class EndpointConfig : IConfigureThisEndpoint
     {
@@ -22,7 +23,6 @@ namespace Orders.Endpoint
 
             var bridge = transport.Routing().ConnectToBridge("payments.bridge.endpoint.asb");
             bridge.RegisterPublisher(typeof(IRefundCompleted), "payments.endpoint.distributor");
-            bridge.RegisterPublisher(typeof(IPaymentIntentGuaranteeRequested), "asbclient");
 
             //TODO: NServiceBus provides multiple durable storage options, including SQL Server, RavenDB, and Azure Storage Persistence.
             // Refer to the documentation for more details on specific options.

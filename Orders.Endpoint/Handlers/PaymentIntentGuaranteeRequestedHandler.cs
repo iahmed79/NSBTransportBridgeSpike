@@ -5,7 +5,7 @@
 
     using NServiceBus;
 
-    using Payments.Events;
+    using Payments.Messages.Events;
 
     public class PaymentIntentGuaranteeRequestedHandler : IHandleMessages<IPaymentIntentGuaranteeRequested>
     {
