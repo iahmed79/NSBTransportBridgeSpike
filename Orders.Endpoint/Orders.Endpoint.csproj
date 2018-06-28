@@ -75,11 +75,6 @@
       <Name>Payments.Messages</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="License.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <StartAction>Program</StartAction>
