@@ -12,16 +12,18 @@ namespace Orders.Endpoint
         {
             var dbConnectionString = Environment.GetEnvironmentVariable("NSBCompat_DBConnectionString");
             var asbConnectionString = Environment.GetEnvironmentVariable("NSBCompat_ASBConnectionString");
+            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+            endpointConfiguration.AddDeserializer<XmlSerializer>();
 
             var transport = endpointConfiguration.UseTransport<AzureServiceBusTransport>();
             transport.ConnectionString(asbConnectionString);
-
+            
             var topology = transport.UseForwardingTopology();
 
             var conventions = endpointConfiguration.Conventions();
             conventions.DefiningEventsAs(t => t.Namespace != null && t.Namespace.EndsWith("Events"));
 
-            var bridge = transport.Routing().ConnectToBridge("payments.bridge.endpoint.asb");
+            var bridge = transport.Routing().ConnectToRouter("Payments.Bridge");
             bridge.RegisterPublisher(typeof(IRefundCompleted), "payments.endpoint.distributor");
 
             //TODO: NServiceBus provides multiple durable storage options, including SQL Server, RavenDB, and Azure Storage Persistence.

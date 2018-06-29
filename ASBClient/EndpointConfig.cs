@@ -23,7 +23,7 @@ namespace ASBClient
             transport.UseForwardingTopology();
 
             var routing = transport.Routing();
-            var bridge = routing.ConnectToBridge("payments.bridge.endpoint.asb");
+            var bridge = routing.ConnectToRouter("Payments.Bridge");
 
             var conventions = endpointConfiguration.Conventions();
             conventions.DefiningCommandsAs(t => t.Namespace != null && t.Namespace.EndsWith("Commands"));
