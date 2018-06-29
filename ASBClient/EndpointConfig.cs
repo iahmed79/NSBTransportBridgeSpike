@@ -3,7 +3,7 @@ namespace ASBClient
     using System;
     using System.Threading.Tasks;
     using NServiceBus;
-
+    using NServiceBus.MessageMutator;
     using Payments.Messages.Commands;
     using Payments.Messages.Events;
 
@@ -17,6 +17,7 @@ namespace ASBClient
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
             endpointConfiguration.AddDeserializer<XmlSerializer>();
+            endpointConfiguration.RegisterMessageMutator(new MutateOutgoingTransportMessages());
 
             var transport = endpointConfiguration.UseTransport<AzureServiceBusTransport>();
             transport.ConnectionString(asbConnectionString);

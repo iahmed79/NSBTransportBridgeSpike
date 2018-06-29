@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Asos.Finance.Encryption, Version=0.1.59.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Asos.Finance.Encryption.0.1.59\lib\netstandard2.0\Asos.Finance.Encryption.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\Iesi.Collections.4.0.2\lib\net461\Iesi.Collections.dll</HintPath>
     </Reference>

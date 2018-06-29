@@ -3,7 +3,7 @@ using System;
 namespace Orders.Endpoint
 {
     using NServiceBus;
-
+    using NServiceBus.MessageMutator;
     using Payments.Messages.Events;
 
     public class EndpointConfig : IConfigureThisEndpoint
@@ -14,6 +14,7 @@ namespace Orders.Endpoint
             var asbConnectionString = Environment.GetEnvironmentVariable("NSBCompat_ASBConnectionString");
             endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
             endpointConfiguration.AddDeserializer<XmlSerializer>();
+            endpointConfiguration.RegisterMessageMutator(new MutateOutgoingTransportMessages());
 
             var transport = endpointConfiguration.UseTransport<AzureServiceBusTransport>();
             transport.ConnectionString(asbConnectionString);
