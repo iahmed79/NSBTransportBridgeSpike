@@ -2,6 +2,7 @@ namespace ASBClient
 {
     using System;
     using System.Threading.Tasks;
+    using Encryption;
     using NServiceBus;
     using NServiceBus.MessageMutator;
     using Payments.Messages.Commands;

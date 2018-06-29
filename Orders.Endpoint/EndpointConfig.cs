@@ -2,6 +2,7 @@ using System;
 
 namespace Orders.Endpoint
 {
+    using Encryption;
     using NServiceBus;
     using NServiceBus.MessageMutator;
     using Payments.Messages.Events;

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asos.Finance.Encryption" Version="0.1.59" />
+    <PackageReference Include="NServiceBus" Version="7.0.1" />
+  </ItemGroup>
+
+</Project>

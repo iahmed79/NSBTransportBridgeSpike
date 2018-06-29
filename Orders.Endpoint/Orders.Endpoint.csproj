@@ -73,7 +73,6 @@
   <ItemGroup>
     <Compile Include="EndpointConfig.cs" />
     <Compile Include="Handlers\RefundCompletedHandler.cs" />
-    <Compile Include="MutateOutgoingTransportMessages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -82,6 +81,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Encryption\Encryption.csproj">
+      <Project>{1FD9DB77-90A3-4084-A438-EB8EE4A81112}</Project>
+      <Name>Encryption</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Payments.Messages\Payments.Messages.csproj">
       <Project>{7069e66f-b325-455d-b706-6b06eb15707f}</Project>
       <Name>Payments.Messages</Name>

@@ -1,4 +1,4 @@
-﻿namespace Orders.Endpoint
+﻿namespace Encryption
 {
     using System;
     using System.Text;
