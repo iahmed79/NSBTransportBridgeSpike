@@ -2,24 +2,16 @@
 {
     using System;
     using System.Data.SqlClient;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
-    using Asos.Finance.Encryption;
-
-    using Newtonsoft.Json;
+    using Encryption;
 
     using NServiceBus;
     using NServiceBus.Configuration.AdvancedExtensibility;
     using NServiceBus.Router;
-    using NServiceBus.Routing;
     using NServiceBus.Serialization;
     using NServiceBus.Settings;
     using NServiceBus.Transport;
-
-    using JsonSerializer = NServiceBus.JsonSerializer;
 
     class Program
     {
@@ -73,88 +65,19 @@
         {
             return forwardmethod((ops, transaction, context) =>
                 {
-                    var key = "gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6";
-                    var replacedBody = message.Body;
-
-                    if (ops.MulticastTransportOperations.Any())
+                    if (!SecureDispatcher.ContainsEnclosedMessageTypes(ops))
                     {
-                        var op = ops.MulticastTransportOperations.Single();
-
-                        if (!op.Message.Headers.ContainsKey(Headers.EnclosedMessageTypes))
-                        {
-                            return dispatchmethod(ops, transaction, context);
-                        }
-
-                        if (op.Message.Body.Length > 0 && inputqueue == "Left")
-                        {
-                            Console.WriteLine("encrypt here");
-                            var encrypted = new Encrypter().Encrypt(key, op.Message.Body);
-                            replacedBody = encrypted.Payload;
-                            op.Message.Headers.Add("encryption-key-iv", encrypted.InitialisationVector);
-                        }
-
-                        if (op.Message.Body.Length > 0 && inputqueue == "Right")
-                        {
-                            var iv = op.Message.Headers["encryption-key-iv"];
-
-                            Console.WriteLine("decrypt this:");
-                            Console.WriteLine(Encoding.UTF8.GetString(op.Message.Body));
-                            var encryptedPayload = new EncryptedPayload(op.Message.Body, iv, key);
-                            replacedBody = Encoding.UTF8.GetBytes(new Encrypter().Decrypt(encryptedPayload));
-                            Console.WriteLine();
-                            Console.WriteLine(Encoding.UTF8.GetString(replacedBody));
-                        }
-
-                        var newMessage = new OutgoingMessage(op.Message.MessageId, op.Message.Headers, replacedBody);
-                        var newOp = new TransportOperation(
-                            newMessage,
-                            new MulticastAddressTag(op.MessageType),
-                            op.RequiredDispatchConsistency,
-                            op.DeliveryConstraints);
-                        var newOps = new TransportOperations(newOp);
-
-                        return dispatchmethod(newOps, transaction, context);
+                        return dispatchmethod(ops, transaction, context);
                     }
 
-
-                    if (ops.UnicastTransportOperations.Any())
+                    if (inputqueue == "Left")
                     {
-                        var op = ops.UnicastTransportOperations.Single();
-                        
-                        if (!op.Message.Headers.ContainsKey(Headers.EnclosedMessageTypes))
-                        {
-                            return dispatchmethod(ops, transaction, context);
-                        }
+                        return SecureDispatcher.DispatchWithEncryptedMessageBody(ops, dispatchmethod, transaction, context);
+                    }
 
-                        if (op.Message.Body.Length > 0 && inputqueue == "Left")
-                        {
-                            Console.WriteLine("encrypt here");
-                            var encrypted = new Encrypter().Encrypt(key, op.Message.Body);
-                            replacedBody = encrypted.Payload;
-                            op.Message.Headers.Add("encryption-key-iv", encrypted.InitialisationVector);
-                        }
-
-                        if (op.Message.Body.Length > 0 && inputqueue == "Right")
-                        {
-                            var iv = op.Message.Headers["encryption-key-iv"];
-
-                            Console.WriteLine("decrypt this:");
-                            Console.WriteLine(Encoding.UTF8.GetString(op.Message.Body));
-                            var encryptedPayload = new EncryptedPayload(op.Message.Body, iv, key);
-                            replacedBody = Encoding.UTF8.GetBytes(new Encrypter().Decrypt(encryptedPayload));
-                            Console.WriteLine();
-                            Console.WriteLine(Encoding.UTF8.GetString(replacedBody));
-                        }
-
-                        var newMessage = new OutgoingMessage(op.Message.MessageId, op.Message.Headers, replacedBody);
-                        var newOp = new TransportOperation(
-                            newMessage,
-                            new UnicastAddressTag(op.Destination),
-                            op.RequiredDispatchConsistency,
-                            op.DeliveryConstraints);
-                        var newOps = new TransportOperations(newOp);
-
-                        return dispatchmethod(newOps, transaction, context);
+                    if (inputqueue == "Right")
+                    {
+                        return SecureDispatcher.DispatchWithDecryptedMessageBody(ops, dispatchmethod, transaction, context);
                     }
 
                     return dispatchmethod(ops, transaction, context);

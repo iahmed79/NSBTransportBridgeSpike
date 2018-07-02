@@ -101,6 +101,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Encryption\Encryption.csproj">
+      <Project>{1FD9DB77-90A3-4084-A438-EB8EE4A81112}</Project>
+      <Name>Encryption</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <StartAction>Program</StartAction>
